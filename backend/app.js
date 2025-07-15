@@ -24,5 +24,9 @@ app.use(
 );
 
 app.use(express.static(path.join(__dirname, "public")));
-
+if (process.env.NODE_ENV === "development") {
+  app.use(morgan("dev"));
+}
+app.use(express.json({ limit: "10kb" }));
+app.use(mongoSanitize());
 module.exports = app;
