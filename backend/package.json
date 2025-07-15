@@ -1,0 +1,36 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "main": "app.js",
+  "description": "Social Media using MERN stack",
+  "scripts": {
+    "start": "nodemon server.js"
+  },
+  "author": "mika",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^3.0.2",
+    "cloudinary": "^2.7.0",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "datauri": "^4.1.0",
+    "dotenv": "^17.2.0",
+    "express": "^5.1.0",
+    "express-mongo-sanitize": "^2.2.0",
+    "express-rate-limit": "^7.5.1",
+    "hbs": "^4.2.0",
+    "helmet": "^8.1.0",
+    "hpp": "^0.2.3",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.16.3",
+    "morgan": "^1.10.0",
+    "multer": "^2.0.1",
+    "nodemailer": "^7.0.5",
+    "sharp": "^0.34.3",
+    "slugify": "^1.6.6",
+    "validator": "^13.15.15"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  }
+}
