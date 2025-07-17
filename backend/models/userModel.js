@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const validator = require("validator");
+const bcrypt = require("bcryptjs");
 
 const userSchema = new mongoose.Schema(
   {
@@ -75,7 +76,7 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: null,
     },
-    otpExpired: {
+    otpExpires: {
       type: Date,
       default: null,
     },
@@ -96,6 +97,16 @@ const userSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
+
+/*
+pre - middleware hook -> before the data is saved to the database, it will encrypt our password
+*/
+userSchema.pre("save", async function (next) {
+  if (!this.isModified("password")) return next(); // if true, no need to run this because there is no work for password
+  this.password = await bcrypt.hash(this.password, 12);
+  this.passwordConfirm = undefined; // undefined because this is the first time the password is created and dont need to confirm yet
+  next();
+});
 
 const User = mongoose.model("User", userSchema);
 module.exports = User;

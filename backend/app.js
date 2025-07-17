@@ -47,7 +47,7 @@ app.use("/api/v1/users", userRouter);
 // Routes for posts
 
 // handle all unmatched routes with a 404 error using AppError
-app.all("/{*splat}", (req, res, next) => {
+app.all("*", (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server.`, 404));
 });
 
