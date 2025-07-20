@@ -3,6 +3,17 @@ const generateOTP = require("../utils/generateOTP");
 const User = require("../models/userModel");
 const AppError = require("../utils/appError");
 const jwt = require("jsonwebtoken");
+const fs = require("fs");
+const path = require("path");
+const hbs = require("hbs");
+const sendEmail = require("../utils/email");
+
+const loadTemplate = (templateName, replacements) => {
+  const templatePath = path.join(__dirname, "../emailTemplate", templateName);
+  const source = fs.readFileSync(templatePath, "utf-8");
+  const template = hbs.compile(source);
+  return template(replacements);
+};
 
 // signToken function
 const signToken = (id) => {
@@ -50,10 +61,42 @@ exports.signup = catchAsync(async (req, res, next) => {
     otp,
     otpExpires,
   });
-  res.status(200).json({
-    status: "success",
-    data: {
-      user: newUser,
-    },
+  // res.status(200).json({
+  //   status: "success",
+  //   data: {
+  //     user: newUser,
+  //   },
+  // });
+
+  const htmlTemplate = loadTemplate("otpTemplate.hbs", {
+    title: "OTP Verification",
+    username: newUser.username,
+    otp,
+    message: "Your One-Time Password (OTP) for account verification is:",
   });
+
+  try {
+    await sendEmail({
+      email: newUser.email,
+      subject: "OTP for Email Verification",
+      html: htmlTemplate,
+    });
+
+    createSendToken(
+      newUser,
+      200,
+      res,
+      "Registration Successful. Check your email for OTP verificaton."
+    );
+  } catch (error) {
+    console.error("❌ Email sending failed:", error);
+
+    await User.findByIdAndDelete(newUser.id);
+    return next(
+      new AppError(
+        "There is an error creating the account. Please try again later.",
+        500
+      )
+    );
+  }
 });
