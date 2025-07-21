@@ -100,3 +100,30 @@ exports.signup = catchAsync(async (req, res, next) => {
     );
   }
 });
+
+// Verify user account controller
+
+exports.verifyAccount = catchAsync(async (req, res, next) => {
+  const { otp } = req.body;
+  if (!otp) {
+    return next(new AppError("Otp is required for verification", 400));
+  }
+
+  const user = req.user;
+
+  if (user.otp !== otp) {
+    return next(new AppError("Invalid OTP", 400));
+  }
+
+  if (Date.now() > user.otpExpires) {
+    return next(new AppError("OTP has expired. Please request a new OTP", 400));
+  }
+
+  user.isVerified = true;
+  user.otp = undefined;
+  user.otpExpires = undefined;
+
+  await user.save({ validateBeforeSave: false });
+
+  createSendToken(user, 200, res, "Email has been verified");
+});
