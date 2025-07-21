@@ -21,5 +21,6 @@ _Still working on the backend structure; will provide an update soon._
 - `mongoose` – ODM (Object Data Modeling) library for MongoDB.
 - `validator` – Validates and sanitizes strings.
 - `nodemon` – Dev tool that auto-restarts the server on file changes.
+- `hbs` - Generate email template for sending OTP.
 
 > 📖 Documentation is continuously updated alongside development.
