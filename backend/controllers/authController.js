@@ -127,3 +127,56 @@ exports.verifyAccount = catchAsync(async (req, res, next) => {
 
   createSendToken(user, 200, res, "Email has been verified");
 });
+
+exports.resendOtp = catchAsync(async (req, res, next) => {
+  const { email } = req.user;
+  if (!email) {
+    return next(new AppError("Email is required", 400));
+  }
+
+  const user = await User.findOne({ email });
+
+  if (!user) {
+    return next(new AppError("User Not Found", 404));
+  }
+
+  if (user.isVerified) {
+    return next(new AppError("This account is already verified", 400));
+  }
+
+  const otp = generateOTP();
+
+  const otpExpires = Date.now() + 24 * 60 * 60 * 1000;
+
+  user.otp = otp;
+  user.otpExpires = otpExpires;
+  await user.save({ validateBeforeSave: false });
+
+  const htmlTemplate = loadTemplate("otpTemplate.hbs", {
+    title: "OTP Verification",
+    username: user.username,
+    otp,
+    message: "Your One-Time Password (OTP) for account verification is:",
+  });
+
+  try {
+    await sendEmail({
+      email: user.email,
+      subject: "Resent OTP for email verification",
+      html: htmlTemplate,
+    });
+
+    res.status(200).json({
+      status: success,
+      message: "A new OTP is sent to your email",
+    });
+  } catch (error) {
+    user.otp = undefined;
+    user.otpExpires = undefined;
+    await user.save({ validateBeforeSave: false });
+
+    return next(
+      new AppError("There is an error sending email. Try again later", 500)
+    );
+  }
+});
