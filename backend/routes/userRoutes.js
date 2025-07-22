@@ -7,6 +7,7 @@ const {
   logout,
   forgetPassword,
   resetPassword,
+  changePassword,
 } = require("../controllers/authController");
 const isAuthenticated = require("../middleware/isAuthenticated");
 
@@ -19,5 +20,6 @@ router.post("/login", login);
 router.post("/logout", logout);
 router.post("/forget-password", forgetPassword);
 router.post("/reset-password", resetPassword);
+router.post("/change-password", isAuthenticated, changePassword);
 
 module.exports = router;

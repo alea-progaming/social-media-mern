@@ -268,8 +268,35 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
   user.password = password;
   user.passwordConfirm = passwordConfirm;
   user.resetPasswordOTP = undefined;
-  user.resetPasswordOTPExpires = undefined;
+  user.resetPasswordOTPExpires = undefine;
 
   await user.save();
   createSendToken(user, 200, res, "Password reset successfully");
+});
+
+exports.changePassword = catchAsync(async (req, res, next) => {
+  const { currentPassword, newPassword, newPasswordConfirm } = req.body;
+
+  const { email } = req.user;
+
+  const user = await User.findOne({ email }).select("+password");
+
+  if (!user) {
+    return next(new AppError("User not found", 404));
+  }
+
+  if (!(await user.correctPassword(currentPassword, user.password))) {
+    return next(new AppError("Incorrect current password", 400));
+  }
+
+  if (newPassword !== newPasswordConfirm) {
+    return next(
+      new AppError("New password and confirm password are not the same", 400)
+    );
+  }
+
+  user.password = newPassword;
+  user.passwordConfirm = newPasswordConfirm;
+  user.save();
+  createSendToken(user, 200, res, "Password changed successfully");
 });
