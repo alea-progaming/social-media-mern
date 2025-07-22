@@ -10,7 +10,7 @@ const sendEmail = async (options) => {
   });
 
   const mailOptions = {
-    form: `'Photogram' Share your Imagination`,
+    from: `'Photogram' Share your Imagination`,
     to: options.email,
     subject: options.subject,
     html: options.html,

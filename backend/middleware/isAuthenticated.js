@@ -9,10 +9,7 @@ const isAuthenticated = catchAsync(async (req, res, next) => {
 
   if (!token) {
     return next(
-      new AppError(
-        "You are not logged in to access. Please log in to access",
-        401
-      )
+      new AppError("You are not logged in. Please log in to access", 401)
     );
   }
 
