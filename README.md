@@ -22,5 +22,8 @@ _Still working on the backend structure; will provide an update soon._
 - `validator` – Validates and sanitizes strings.
 - `nodemon` – Dev tool that auto-restarts the server on file changes.
 - `hbs` - Generate email template for sending OTP.
+- `cloudinary` - Configure image upload functionality
+- `sharp` - Optimize image posts
+
 
 > 📖 Documentation is continuously updated alongside development.
