@@ -10,7 +10,13 @@ const {
   changePassword,
 } = require("../controllers/authController");
 const isAuthenticated = require("../middleware/isAuthenticated");
-const { getProfile, editProfile } = require("../controllers/userController");
+const {
+  getProfile,
+  editProfile,
+  suggestedUser,
+  followUnfollow,
+  getMe,
+} = require("../controllers/userController");
 const upload = require("../middleware/multer");
 
 const router = express.Router();
@@ -33,5 +39,8 @@ router.post(
   upload.single("profilePicture"),
   editProfile
 );
+router.get("/suggested-user", isAuthenticated, suggestedUser);
+router.post("/follow-unfollow/:id", isAuthenticated, followUnfollow);
+router.get("/me", isAuthenticated, getMe);
 
 module.exports = router;
