@@ -268,7 +268,7 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
   user.password = password;
   user.passwordConfirm = passwordConfirm;
   user.resetPasswordOTP = undefined;
-  user.resetPasswordOTPExpires = undefine;
+  user.resetPasswordOTPExpires = undefined;
 
   await user.save();
   createSendToken(user, 200, res, "Password reset successfully");

@@ -10,7 +10,8 @@ const {
   changePassword,
 } = require("../controllers/authController");
 const isAuthenticated = require("../middleware/isAuthenticated");
-const { getProfile } = require("../controllers/userController");
+const { getProfile, editProfile } = require("../controllers/userController");
+const upload = require("../middleware/multer");
 
 const router = express.Router();
 
@@ -26,5 +27,11 @@ router.post("/change-password", isAuthenticated, changePassword);
 
 // User routes
 router.get("/profile/:id", getProfile);
+router.post(
+  "/edit-profile",
+  isAuthenticated,
+  upload.single("profilePicture"),
+  editProfile
+);
 
 module.exports = router;
