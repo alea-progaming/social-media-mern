@@ -2,6 +2,7 @@ const User = require("../models/userModel");
 const catchAsync = require("../utils/catchAsync");
 const { uploadToCloudinary } = require("../utils/cloudinary");
 const getDataUri = require("../utils/dataUri");
+const AppError = require("../utils/appError");
 
 // get user profile
 exports.getProfile = catchAsync(async (req, res, next) => {
