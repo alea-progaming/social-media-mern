@@ -11,7 +11,7 @@ exports.getProfile = catchAsync(async (req, res, next) => {
       "-password -otp -otpExpires -resetPassowrdOTP -resetPassowrdOTPExpires -passwordConfirm"
     )
     .populate({
-      path: "post",
+      path: "posts",
       options: { sort: { createdAt: -1 } },
     })
     .populate({
@@ -40,7 +40,7 @@ exports.editProfile = catchAsync(async (req, res, next) => {
   let cloudResponse;
 
   if (profilePicture) {
-    const fileUri = getDataUri(profilPicture);
+    const fileUri = getDataUri(profilePicture);
     cloudResponse = await uploadToCloudinary(fileUri);
   }
 

@@ -2,6 +2,7 @@ const AppError = require("../utils/appError");
 const catchAsync = require("../utils/catchAsync");
 const sharp = require("sharp");
 const { uploadToCloudinary } = require("../utils/cloudinary");
+const Post = require("../models/postModel");
 
 exports.createPost = catchAsync(async (req, res, next) => {
   const { caption } = req.body;
