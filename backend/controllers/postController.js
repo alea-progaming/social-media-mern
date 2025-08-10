@@ -4,6 +4,7 @@ const sharp = require("sharp");
 const { uploadToCloudinary, cloudinary } = require("../utils/cloudinary");
 const Post = require("../models/postModel");
 const User = require("../models/userModel");
+const Comment = require("../models/commentModel");
 
 exports.createPost = catchAsync(async (req, res, next) => {
   const { caption } = req.body;
@@ -37,8 +38,8 @@ exports.createPost = catchAsync(async (req, res, next) => {
       user: userId,
     },
   });
-  // add post to user's profile
 
+  // add post to user's profile
   const user = await User.findById(userId);
 
   if (user) {
@@ -174,5 +175,77 @@ exports.deletePost = catchAsync(async (req, res, next) => {
   return res.statu(200).json({
     status: "success",
     message: "Post deleted successfully",
+  });
+});
+
+// like dislike a post
+exports.likeOrDislikePost = catchAsync(async (req, res, next) => {
+  const { id } = req.params;
+  const userId = req.user._id;
+
+  const post = await Post.findById(id);
+
+  if (!post) return next(new AppError("Post not found", 404));
+
+  const isLiked = post.likes.includes(userId);
+
+  // remove the like
+  if (isLiked) {
+    await Post.findByIdAndUpdate(
+      id,
+      { $pull: { likes: userId } },
+      { new: true }
+    );
+
+    return res.status(200).json({
+      status: "success",
+      message: "Post disliked successfully",
+    });
+  } else {
+    await Post.findByIdAndUpdate(
+      id,
+      { $addToSet: { likes: userId } },
+      { new: true }
+    );
+    return res.status(200).json({
+      status: "success",
+      message: "Post liked successfully",
+    });
+  }
+});
+
+// add comments to a post functionality
+
+exports.addComment = catchAsync(async (req, res, next) => {
+  // get the id
+  const { id: postId } = req.params.id;
+  const userId = req.user._id;
+
+  const { text } = req.body;
+  const post = await Post.findById(postId);
+
+  if (!post) return next(new AppError("Post not found", 404));
+
+  if (!text) return next(new AppError("Comment text is required", 400));
+  const comment = await Comment.create({
+    text,
+    user: userId,
+    createdAt: Date.now(),
+  });
+  post.comments.push(comment);
+
+  await post.save({ validateBeforeSave: false });
+
+  await comment.populate({
+    path: "user",
+    select: "username profilePicture bio",
+  });
+
+  res.statu(201).json({
+    status: "success",
+    message: "Comment added successfully",
+    data: {
+      comment,
+    },
   });
 });
