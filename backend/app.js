@@ -24,7 +24,7 @@ app.use(helmet());
 // allows cors request from this specific origin
 app.use(
   cors({
-    origin: ["https://localhost:3000"],
+    origin: ["http://localhost:3000"],
     credentials: true, // allows cookies to be sent
   })
 );
