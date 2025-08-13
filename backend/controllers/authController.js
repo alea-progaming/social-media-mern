@@ -40,7 +40,7 @@ const createSendToken = (user, statusCode, res, message) => {
     status: "success",
     message,
     token,
-    data: user,
+    data: { user },
   });
 };
 

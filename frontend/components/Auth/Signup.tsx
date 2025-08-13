@@ -9,6 +9,9 @@ import { BASE_API_URL } from "@/server";
 import axios from "axios";
 import { handleAuthRequest } from "../utils/apiRequest";
 import { toast } from "sonner";
+import { useDispatch } from "react-redux";
+import { setAuthUser } from "@/store/authSlice";
+import { useRouter } from "next/navigation";
 
 interface FormData {
   username: string;
@@ -18,6 +21,8 @@ interface FormData {
 }
 
 const Signup = () => {
+  const dispatch = useDispatch();
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState<FormData>({
     username: "",
@@ -42,13 +47,19 @@ const Signup = () => {
     const result = await handleAuthRequest(signupReq, setIsLoading);
 
     if (result) {
-      console.log(result.data.data.user);
-      toast.success(result.data.message);
-    }
+      // * console.log(result); this works
 
-    // TODO :
-    // 1. Redirect to Homepage
-    // 2. Add user to redux store
+      // ! this doesnt work
+      // console.log("Get user:", result.data.data.user);
+
+      dispatch(setAuthUser(result.data.data.user));
+      toast.success(result.data.message);
+      router.push("/");
+      // Add a GMS using Redux. Configure redux store so that user is store in a Global State so it could be used anywhere we want
+      // TODO :
+      // 1. Redirect to Homepage
+      // 2. Add user to redux store
+    }
   };
 
   return (

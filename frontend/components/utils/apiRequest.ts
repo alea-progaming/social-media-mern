@@ -12,6 +12,8 @@ export const handleAuthRequest = async <T>(
   if (setLoading) setLoading(true);
   try {
     const response = await requestCallBack();
+    // console.log(response);
+
     return response;
   } catch (error) {
     const axiosError = error as AxiosError<ApiErrorResponse>;
