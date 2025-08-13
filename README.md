@@ -24,6 +24,8 @@ _Still working on the backend structure; will provide an update soon._
 - `hbs` - Generate email template for sending OTP.
 - `cloudinary` - Configure image upload functionality
 - `sharp` - Optimize image posts
+- `shadcn` - UI components library
+- `axios` - make http request to API endpoints
 
 
 > 📖 Documentation is continuously updated alongside development.
