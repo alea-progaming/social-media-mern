@@ -1,7 +1,7 @@
 "use client";
 
 import { Eye, EyeOff } from "lucide-react";
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, use, useState } from "react";
 
 interface Props {
   name: string;
@@ -25,6 +25,7 @@ const PasswordInput = ({
   iconClassName = "",
 }: Props) => {
   const [showPassword, setShowPassword] = useState(false);
+
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
@@ -36,7 +37,7 @@ const PasswordInput = ({
           {label}
         </label>
       )}
-      <div className="relative">
+      <div className="relative password-input-wrapper">
         <input
           type={showPassword ? "text" : "password"}
           placeholder={placeholder}
