@@ -54,15 +54,9 @@ const Login = () => {
         <h1 className="text-xl font-bold sm:text-2xl lg:text-3xl text-center">
           Login with <span className="text-blue-600">Photogram</span>
         </h1>
-        <form
-          className="w-[90%] mt-4"
-          onSubmit={handleSubmit}
-        >
+        <form className="w-[90%] mt-4" onSubmit={handleSubmit}>
           <div className="mb-4">
-            <label
-              htmlFor="email"
-              className="font-semibold mb-2 block"
-            >
+            <label htmlFor="email" className="font-semibold mb-2 block">
               Email
             </label>
             <input
@@ -84,7 +78,7 @@ const Login = () => {
               onChange={handleChange}
             />
             <Link
-              href="/auth/forgot-password"
+              href="/auth/forget-password"
               className="mt-2 text-red-600 block font-semibold text-base cursor-pointer text-right"
             >
               Forgot password?
