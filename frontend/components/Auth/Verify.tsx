@@ -1,22 +1,35 @@
 "use client";
 
-import { MailCheck } from "lucide-react";
+import { Loader, MailCheck } from "lucide-react";
 import LoadingButton from "../Helper/LoadingButton";
-import { ChangeEvent, KeyboardEvent, useRef, useState } from "react";
+import { ChangeEvent, KeyboardEvent, useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { BASE_API_URL } from "@/server";
 import { handleApiRequest } from "../utils/apiRequest";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import { setAuthUser } from "@/store/authSlice";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { RootState } from "@/store/store";
 
 const Verify = () => {
   const dispatch = useDispatch();
+  const user = useSelector((state: RootState) => state?.auth.user);
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [otp, setOtp] = useState<string[]>(["", "", "", "", "", ""]);
+  const [isPageLoading, setIsPageLoading] = useState(true);
+
+  useEffect(() => {
+    if (!user) {
+      router.replace("/auth/login");
+    } else if (user && user.isVerified) {
+      router.replace("/");
+    } else {
+      setIsPageLoading(false);
+    }
+  }, [user, router]);
 
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
   console.log(otp);
@@ -83,12 +96,20 @@ const Verify = () => {
     }
   };
 
+  if (isPageLoading) {
+    return (
+      <div className="h-screen flex items-center justify-center">
+        <Loader className="w-10 h-10 animate-spin" />
+      </div>
+    );
+  }
+
   return (
     <div className="h-screen flex items-center flex-col justify-center">
       <MailCheck className="w-20 h-20 sm:w-32 sm:h-32 text-red-600 mb-12" />
       <h1 className="text-2xl sm:text-3xl font-bold mb-3">OTP Verification</h1>
       <p className="mb-6 text-sm sm:text-base text-gray-600 font-medium">
-        We have sent a code to your@email.com
+        We have sent a code to {user?.email}
       </p>
       {/* OTP Input */}
       <div className="flex space-x-4">
