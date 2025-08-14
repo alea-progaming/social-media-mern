@@ -1,7 +1,7 @@
 "use client";
 
 import { Eye, EyeOff } from "lucide-react";
-import React, { ChangeEvent, use, useState } from "react";
+import React, { ChangeEvent, useState } from "react";
 
 interface Props {
   name: string;

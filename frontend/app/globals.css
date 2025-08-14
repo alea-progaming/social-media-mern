@@ -3,6 +3,27 @@
 
 @custom-variant dark (&:is(.dark *));
 
+@layer utilities {
+  .no-spinner::-webkit-outer-spin-button,
+  .no-spinner::-webkit-inner-spin-button {
+    @apply appearance-none;
+    margin: 0;
+  }
+
+  .no-spinner {
+    @apply appearance-none;
+  }
+}
+
+@layer components {
+  /* Don't display default eye icon */
+  .password-input-wrapper input[type="password"]::-ms-reveal,
+  .password-input-wrapper input[type="password"]::-ms-clear,
+  .password-input-wrapper input[type="password"]::-webkit-reveal {
+    display: none;
+  }
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);

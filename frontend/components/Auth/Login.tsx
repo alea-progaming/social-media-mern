@@ -6,7 +6,7 @@ import LoadingButton from "../Helper/LoadingButton";
 import Link from "next/link";
 import { BASE_API_URL } from "@/server";
 import axios from "axios";
-import { handleAuthRequest } from "../utils/apiRequest";
+import { handleApiRequest } from "../utils/apiRequest";
 import { toast } from "sonner";
 import { useDispatch } from "react-redux";
 import { setAuthUser } from "@/store/authSlice";
@@ -39,7 +39,7 @@ const Login = () => {
       await axios.post(`${BASE_API_URL}/users/login`, formData, {
         withCredentials: true,
       });
-    const result = await handleAuthRequest(loginReq, setIsLoading);
+    const result = await handleApiRequest(loginReq, setIsLoading);
 
     if (result) {
       dispatch(setAuthUser(result.data.data.user));

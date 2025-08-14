@@ -6,7 +6,7 @@ import LoadingButton from "../Helper/LoadingButton";
 import Link from "next/link";
 import { BASE_API_URL } from "@/server";
 import axios from "axios";
-import { handleAuthRequest } from "../utils/apiRequest";
+import { handleApiRequest } from "../utils/apiRequest";
 import { toast } from "sonner";
 import { useDispatch } from "react-redux";
 import { setAuthUser } from "@/store/authSlice";
@@ -43,7 +43,7 @@ const Signup = () => {
       await axios.post(`${BASE_API_URL}/users/signup`, formData, {
         withCredentials: true,
       });
-    const result = await handleAuthRequest(signupReq, setIsLoading);
+    const result = await handleApiRequest(signupReq, setIsLoading);
 
     if (result) {
       // * console.log(result); this works
@@ -53,7 +53,7 @@ const Signup = () => {
 
       dispatch(setAuthUser(result.data.data.user));
       toast.success(result.data.message);
-      router.push("/");
+      router.push("/auth/verify");
       // Add a GMS using Redux. Configure redux store so that user is store in a Global State so it could be used anywhere we want
       // TODO :
       // 1. Redirect to Homepage -> completed

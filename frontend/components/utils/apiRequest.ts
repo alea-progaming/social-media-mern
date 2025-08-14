@@ -5,7 +5,7 @@ interface ApiErrorResponse {
   message: string;
 }
 
-export const handleAuthRequest = async <T>(
+export const handleApiRequest = async <T>(
   requestCallBack: () => Promise<T>,
   setLoading?: (loading: boolean) => void
 ): Promise<T | null> => {
